@@ -30,11 +30,11 @@ app.use(webpackHotMiddleware(compiler));
 
 // add "reload" to express, see: https://www.npmjs.com/package/reload
 // let reload = require('reload');
-let http = require('http');
-
-let server = http.createServer(app);
+// let http = require('http');
+//
+// let server = http.createServer(app);
 // reload(server, app);
 
-server.listen(port, function () {
+app.listen(port, function () {
     console.log('App (dev) is now running on port 3000!');
 });
