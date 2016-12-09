@@ -9,10 +9,19 @@
 </template>
 <script>
     export default {
-        data: function () {
-            this.$http.get('/api/test').then(function(rst) {
-                console.log(rst);
+        mounted: function () {
+            let that = this;
+            this.$http.get('/api/sys/menus').then(function (rsp) {
+                console.log(rsp.body)
             })
+        },
+        data   : {
+            menus: []
+        },
+        method : {
+            getMenus: function () {
+
+            }
         }
     }
 </script>

@@ -11,21 +11,9 @@ import Home from './components/system/home.vue'
 
 import DataFactory from './config/dataFactory'
 
-DataFactory.mock();
+// DataFactory.mock();
 
 
 const app = new Vue({
     render: h => h(Home)
 }).$mount('#app');
-
-// new Vue({
-//     el      : '#app',
-//     template: `<div><h1>Hello App!</h1>
-//     <p>
-// <router-link to="/foo">Go to Foo</router-link>
-// <router-link to="/bar">Go to Bar</router-link>
-// </p>
-// <router-view></router-view></div>`
-// });
-
-// 现在，应用已经启动了！

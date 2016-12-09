@@ -1,7 +1,8 @@
 "use strict";
 
-let express = require('express'),
-    path    = require('path');
+let express         = require('express'),
+    proxyMiddleware = require('http-proxy-middleware'),
+    path            = require('path');
 
 let app  = express();
 let port = 3000;
@@ -28,10 +29,11 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
+app.use(proxyMiddleware('/api', {target: 'http://localhost:8080'}));
+
 // add "reload" to express, see: https://www.npmjs.com/package/reload
 // let reload = require('reload');
-// let http = require('http');
-//
+// let http   = require('http');
 // let server = http.createServer(app);
 // reload(server, app);
 

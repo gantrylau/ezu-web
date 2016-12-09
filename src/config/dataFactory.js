@@ -6,8 +6,15 @@ import Mock from 'mockjs';
 
 module.exports = {
     mock() {
-        Mock.mock('/api/test', {
-            id: 1
+        Mock.mock('/api/test', function (options) {
+            options.dataType = 'JSON';
+            return {
+                "object": {
+                    "120000": "天津市",
+                    "130000": "河北省",
+                    "140000": "山西省"
+                }
+            }
         });
     }
 };
