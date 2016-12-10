@@ -4,17 +4,18 @@ import Mock from 'mockjs';
 //
 // }
 
+function success(data) {
+    return {
+        success: true,
+        data   : data,
+        message: ''
+    }
+}
+
 module.exports = {
     mock() {
-        Mock.mock('/api/test', function (options) {
-            options.dataType = 'JSON';
-            return {
-                "object": {
-                    "120000": "天津市",
-                    "130000": "河北省",
-                    "140000": "山西省"
-                }
-            }
-        });
+        Mock.mock('/api/sys/menus', 'get', success([
+            {id: 1, name: '系统菜单'}
+        ]));
     }
 };

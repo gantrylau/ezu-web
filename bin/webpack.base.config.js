@@ -1,7 +1,7 @@
 const path              = require('path'),
       ExtractTextPlugin = require('extract-text-webpack-plugin'),
       webpack           = require('webpack'),
-      // CopyWebpackPlugin = require('copy-webpack-plugin'),
+      CopyWebpackPlugin = require('copy-webpack-plugin'),
       merge             = require('webpack-merge'),
       HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -23,21 +23,25 @@ module.exports = {
         alias     : {
             'vue'       : path.resolve(rootPath, 'node_modules/vue/dist/vue.min.js'),
             'vue-router': path.resolve(rootPath, 'node_modules/vue-router/dist/vue-router.min.js'),
+            'jquery'    : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
             'nm:'       : path.resolve(rootPath, 'node_modules'),
             'src:'      : srcPath
         }
     },
     externals: {},
     plugins  : [
-        // new CopyWebpackPlugin([
-        //     {from: path.resolve(srcPath, 'assets'), to: 'assets'}
-        // ]),
+        new CopyWebpackPlugin([
+            {from: path.resolve(srcPath, 'assets'), to: 'assets'}
+        ]),
         // new webpack.DllPlugin({
         //     path   : path.resolve(rootPath, 'bin/manifest.json'),
         //     name   : '[name]',
         //     context: __dirname,
         // }),
         // new webpack.optimize.UglifyJsPlugin({minimize: true}),
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        // }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'js/vendor.bundle.js'),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),

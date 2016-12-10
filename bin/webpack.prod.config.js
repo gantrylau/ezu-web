@@ -3,11 +3,10 @@ var path       = require('path'),
     merge      = require('webpack-merge'),
     baseConfig = require('./webpack.base.config.js');
 
-var publicPath = '/ng2-example/dev';
 module.exports = merge(baseConfig, {
     entry : {
-        vendor: ['@angular/core', '@angular/router', '@angular/common', '@angular/compiler', '@angular/forms', '@angular/http', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/upgrade'],
-        main  : [baseConfig.rootPath + '/src/main.ts']
+        vendor: ['vue', 'vue-router'],
+        main  : [path.resolve(baseConfig.rootPath, 'src/index.js')]
     },
     output: {
         // publicPath: publicPath,
