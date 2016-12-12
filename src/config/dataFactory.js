@@ -15,7 +15,9 @@ function success(data) {
 module.exports = {
     mock() {
         Mock.mock('/api/sys/menus', 'get', success([
-            {id: 1, name: '系统菜单'}
+            {id: 1, name: '系统菜单'},
+            {id: 2, name: '用户管理', pid: 1},
+            {id: 3, name: '用户列表', pid: 2}
         ]));
     }
 };

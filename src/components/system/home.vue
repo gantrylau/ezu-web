@@ -1,84 +1,99 @@
 <template id="template-home">
     <div class="home-page">
-        <section class="left-nav" v-if="isMenuShown">
-            <ul class="menus-list">
-                <li v-for="menu in menus">{{menu.name}}</li>
+        <section class="home-top-nav">
+            <ul class="top-menus">
+                <li v-for="menu in filterMenus" v-on:click="getChildMenus(menu.id)">{{menu.name}}</li>
             </ul>
         </section>
-        <section class="home-main" v-bind:class="{ml-0:isMenuShown}">
-            <nav class="top-nav">
-                <span class="menu-switcher glyphicon glyphicon-align-justify" v-on:click="switchMenu()"></span>
-            </nav>
-            <div class="content"></div>
+        <section class="home-main">
+            <div class="left-menus">
+                <ul>
+                    <li v-for="menu in leftMenus">{{menu.name}}</li>
+                </ul>
+            </div>
+            <div class="content">
+
+            </div>
         </section>
     </div>
 </template>
 <script>
+    function formatMenusData(menus, id) {
+        let result = [];
+        for (let menu of menus) {
+            if (menu.pid == id) {
+                menu.children = formatMenusData(menus, menu.id);
+                result.push(menu);
+            }
+        }
+        return result;
+    }
     export default {
         data() {
             return {
-                isMenuShown: true,
-                menus      : []
+                leftMenus    : [],
+                currentMenuId: null,
+                isMenuShown  : true,
             }
         },
-        mounted: function () {
+        beforeCreate: function () {
             let that = this;
             this.$http.get('/api/sys/menus').then(function (rsp) {
-                that.menus = rsp.body.data;
+                that.$store.state.menus = formatMenusData(rsp.body.data);
+                that.menus              = rsp.body.data;
+//                console.log(m);
             })
         },
-        methods: {
-            switchMenu: function () {
+        computed    : {
+            filterMenus: function () {
+                let self = this;
+                return self.$store.state.menus.filter(function (menu) {
+                    return !menu.pid
+                })
+            }
+        },
+        mounted     : function () {
+        },
+        methods     : {
+            switchMenu   : function () {
                 this.isMenuShown = !this.isMenuShown;
             },
-            getMenus  : function () {
-
+            getChildMenus: function (id) {
+                let self = this;
+                for (let menu of self.$store.state.menus) {
+                    if (menu.id == id)
+                        self.leftMenus = menu.children || [];
+                }
             }
         }
     }
 </script>
 <style rel="stylesheet/scss" lang="sass">
     .home-page {
+        min-width: 1190px;
         height: 100%;
-        .left-nav {
-            height: 100%;
-            width: 150px;
-            float: left;
-            background-color: #1b2737;
-            .menus-list {
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                list-style-type: none;
-                color: #707883;
+        padding-top: 80px;
+        .home-top-nav {
+            height: 80px;
+            line-height: 80px;
+            background-color: #4778c7;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            .top-menus {
+                width: 1190px;
+                margin: 0 auto;
                 li {
-                    font-size: 20px;
-                    text-align: center;
-                    height: 68px;
-                    line-height: 68px;
-                    border-bottom: 2px solid #172331;
+                    list-style-type: none;
+                    float: left;
                 }
             }
         }
         .home-main {
-            width: auto;
-            height: 100%;
-            margin-left: 150px;
-            &.ml-0 {
-                margin-left: 0;
-            }
-            .top-nav {
-                height: 85px;
-                line-height: 85px;
-                background-color: #4778c7;
-                .menu-switcher {
-                    margin-left: 20px;
-                    height: auto;
-                    display: inline-block;
-                    color: white;
-                    font-size: 24px;
-                    text-align: center;
-                }
+            width: 1190px;
+            margin: 0 auto;
+            .content {
+
             }
         }
     }
