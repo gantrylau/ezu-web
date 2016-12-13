@@ -1,4 +1,4 @@
-<template id="template-home">
+<template id="template-home" xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div class="home-page">
         <section class="home-top-nav">
             <ul class="top-menus">
@@ -7,9 +7,7 @@
         </section>
         <section class="home-main">
             <div class="left-menus">
-                <ul>
-                    <li v-for="menu in leftMenus">{{menu.name}}</li>
-                </ul>
+                <menu-nav :menus="leftMenus"></menu-nav>
             </div>
             <div class="content">
 
@@ -18,6 +16,7 @@
     </div>
 </template>
 <script>
+    import MenuNav from './menu-nav';
     function formatMenusData(menus, id) {
         let result = [];
         for (let menu of menus) {
@@ -36,12 +35,14 @@
                 isMenuShown  : true,
             }
         },
+        components  : {
+            'menu-nav': MenuNav
+        },
         beforeCreate: function () {
             let that = this;
             this.$http.get('/api/sys/menus').then(function (rsp) {
                 that.$store.state.menus = formatMenusData(rsp.body.data);
                 that.menus              = rsp.body.data;
-//                console.log(m);
             })
         },
         computed    : {
