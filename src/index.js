@@ -3,9 +3,10 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
-import Home from './components/system/home.vue'
+import Home from './components/system/home'
 
 import DataFactory from './config/dataFactory'
+
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -15,6 +16,15 @@ const store = new Vuex.Store({
     state: {
         menus: []
     },
+});
+
+// import routes from './config/routes.js';
+
+const routes = require('./config/routes');
+
+const router = new VueRouter({
+    mode  : 'history',
+    routes: routes
 });
 
 let mock = true;
@@ -35,5 +45,6 @@ if (mock)
 
 const app = new Vue({
     store,
+    router: router,
     render: h => h(Home)
 }).$mount('#app');

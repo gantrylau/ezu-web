@@ -9,8 +9,8 @@
             <div class="left-menus">
                 <menu-nav :menus="leftMenus"></menu-nav>
             </div>
-            <div class="content">
-
+            <div class="content container">
+                <router-view></router-view>
             </div>
         </section>
     </div>
@@ -41,8 +41,9 @@
         beforeCreate: function () {
             let that = this;
             this.$http.get('/api/sys/menus').then(function (rsp) {
-                that.$store.state.menus = formatMenusData(rsp.body.data);
-                that.menus              = rsp.body.data;
+                let menus = that.$store.state.menus = formatMenusData(rsp.body.data);
+                if (menus.length > 0)
+                    that.leftMenus = menus[0].children;
             })
         },
         computed    : {
@@ -72,7 +73,6 @@
 <style rel="stylesheet/scss" lang="sass">
     .home-page {
         min-width: 1190px;
-        height: 100%;
         padding-top: 80px;
         .home-top-nav {
             height: 80px;
@@ -92,9 +92,25 @@
         }
         .home-main {
             width: 1190px;
-            margin: 0 auto;
+            margin: 10px auto;
+            position: relative;
+            &:after {
+                display: block;
+                content: ' ';
+                clear: both;
+            }
+            .left-menus {
+                width: 180px;
+                float: left;
+                background-color: white;
+                display: inline-block;
+            }
             .content {
-
+                margin-left: 10px;
+                float: left;
+                background-color: white;
+                width: 1000px;
+                display: inline-block;
             }
         }
     }

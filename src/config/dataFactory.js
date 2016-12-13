@@ -1,9 +1,5 @@
 import Mock from 'mockjs';
 
-// class DataFactory {
-//
-// }
-
 function success(data) {
     return {
         success: true,
@@ -17,7 +13,11 @@ module.exports = {
         Mock.mock('/api/sys/menus', 'get', success([
             {id: 1, name: '系统菜单'},
             {id: 2, name: '用户管理', pid: 1},
-            {id: 3, name: '用户列表', pid: 2}
+            {id: 3, name: '用户列表', pid: 2},
+            {id: 4, name: '11111', pid: 2},
+            {id: 5, name: '22222', pid: 2},
+            {id: 6, name: '角色管理', pid: 1},
+            {id: 7, name: '菜单管理', pid: 1},
         ]));
     }
 };
