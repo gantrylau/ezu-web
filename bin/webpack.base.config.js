@@ -13,7 +13,7 @@ module.exports = {
         loaders: [
             {test: /\.html$/, loader: 'raw'},
             {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-            {test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+            {test: /\.scss$/, loader: ExtractTextPlugin.extract('style!css!sass?sourceMap')},
             {test: /\.css$/, loader: 'style!css'},
             {test: /\.vue$/, loader: 'vue'}
         ]
@@ -21,11 +21,17 @@ module.exports = {
     resolve  : {
         extensions: ['', '.js', '.vue'],
         alias     : {
-            'vue'       : path.resolve(rootPath, 'node_modules/vue/dist/vue.min.js'),
-            'vue-router': path.resolve(rootPath, 'node_modules/vue-router/dist/vue-router.min.js'),
-            'jquery'    : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
-            'nm:'       : path.resolve(rootPath, 'node_modules'),
-            'src:'      : srcPath
+            'vue'         : path.resolve(rootPath, 'node_modules/vue/dist/vue.min.js'),
+            'vue-router'  : path.resolve(rootPath, 'node_modules/vue-router/dist/vue-router.min.js'),
+            'vue-resource': path.resolve(rootPath, 'node_modules/vue-resource/dist/vue-resource.min.js'),
+            'jquery'      : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
+            'nm:'         : path.resolve(rootPath, 'node_modules'),
+            'src:'        : srcPath
+        }
+    },
+    vue      : {
+        loaders: {
+            sass: ExtractTextPlugin.extract('css!sass?sourceMap')
         }
     },
     externals: {},
@@ -46,7 +52,7 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin('./css/[name].css'),
+        new ExtractTextPlugin('[name].css'),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.resolve(srcPath, 'index.html')
