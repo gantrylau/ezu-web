@@ -1,9 +1,13 @@
 <template>
     <ul class="menu-nav lv1">
         <li v-for="l1 in menus">
-            <span class="menu-name">{{l1.name}}</span>
+            <router-link v-if="l1.alias" :to="{name:l1.alias}" class="menu-name">{{l1.name}}</router-link>
+            <a v-else class="menu-name">{{l1.name}}</a>
             <ul v-if="l1.children && l1.children.length>0" class="lv2">
-                <li v-for="l2 in l1.children">{{l2.name}}</li>
+                <li v-for="l2 in l1.children">
+                    <router-link v-if="l2.alias" :to="{name:l2.alias}" class="menu-name">{{l2.name}}</router-link>
+                    <a v-else class="menu-name">{{l2.name}}</a>
+                </li>
             </ul>
         </li>
     </ul>
@@ -29,19 +33,35 @@
             list-style-type: none;
             border-bottom: 1px solid #eeeeee;
             cursor: pointer;
-            .menu-name {
+            > a.menu-name {
+                color: black;
+                text-decoration: none;
                 display: block;
                 height: 45px;
                 line-height: 45px;
                 font-size: 18px;
+                &.router-link-active {
+                    color: white;
+                    background-color: #4778c7;
+                }
             }
-            ul.lv2 {
+            > ul.lv2 {
                 padding: 0;
-                li {
+                > li {
                     list-style-type: none;
-                    font-size: 14px;
-                    line-height: 30px;
-                    height: 30px;
+
+                    > a.menu-name {
+                        color: black;
+                        text-decoration: none;
+                        display: block;
+                        font-size: 14px;
+                        line-height: 30px;
+                        height: 30px;
+                        &.router-link-active {
+                            color: white;
+                            background-color: #4778c7;
+                        }
+                    }
                 }
             }
         }

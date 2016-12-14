@@ -9,18 +9,32 @@ const path              = require('path'),
 const rootPath = constans.rootPath;
 const srcPath  = constans.srcPath;
 module.exports = {
-    rootPath : rootPath,
     module   : {
-        loaders: [
-            {test: /\.html$/, loader: 'raw'},
-            {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-            {test: /\.scss$/, loader: ExtractTextPlugin.extract('style!css!sass?sourceMap')},
-            {test: /\.css$/, loader: 'style!css'},
-            {test: /\.vue$/, loader: 'vue'}
+        rules: [
+            {
+                test   : /\.vue$/,
+                loader : 'vue-loader',
+                options: {
+                    loaders: {
+                        sass: ExtractTextPlugin.extract({
+                            loader        : 'css-loader!sass-loader?sourceMap',
+                            fallbackLoader: 'vue-style-loader'
+                        })
+                    }
+                }
+            },
+            {test: /\.html$/, loader: 'html-loader'},
+            {
+                test   : /\.js$/,
+                loader : 'babel-loader',
+                exclude: /node_modules/
+            },
+            {test: /\.scss$/, loader: ExtractTextPlugin.extract('style-loader!css-loader!sass-loader?sourceMap')},
+            {test: /\.css$/, loader: 'style-loader!css-loader'}
         ]
     },
     resolve  : {
-        extensions: ['', '.js', '.vue'],
+        extensions: ['.js', '.vue'],
         alias     : {
             'vue'         : path.resolve(rootPath, 'node_modules/vue/dist/vue.min.js'),
             'vue-router'  : path.resolve(rootPath, 'node_modules/vue-router/dist/vue-router.min.js'),
@@ -28,11 +42,6 @@ module.exports = {
             'jquery'      : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
             'nm:'         : path.resolve(rootPath, 'node_modules'),
             'src:'        : srcPath
-        }
-    },
-    vue      : {
-        loaders: {
-            sass: 'vue-style!css!sass?sourceMap'
         }
     },
     externals: {},
@@ -49,8 +58,7 @@ module.exports = {
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
         // }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'js/vendor.bundle.js'),
-        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.bundle.js'}),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new ExtractTextPlugin('[name].css'),
