@@ -13,10 +13,16 @@ module.exports = {
         loaders: [
             {test: /\.html$/, loader: 'raw'},
             {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-            {test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+            // {test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+            {test: /\.scss$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader', 'sass-loader?sourceMap')},
             {test: /\.css$/, loader: 'style!css'},
             {test: /\.vue$/, loader: 'vue'}
         ]
+    },
+    vue      : {
+        loaders: {
+            sass: ExtractTextPlugin.extract("css!sass?sourceMap"),
+        }
     },
     resolve  : {
         extensions: ['', '.js', '.vue'],
@@ -46,7 +52,7 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin('./css/[name].css'),
+        new ExtractTextPlugin('style.css'),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.resolve(srcPath, 'index.html')
