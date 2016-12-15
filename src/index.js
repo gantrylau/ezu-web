@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
-import Home from './components/system/home'
+import Layout from './components/system/layout'
 
 import DataFactory from './config/dataFactory'
 
@@ -24,6 +24,7 @@ const routes = require('./config/routes');
 
 const router = new VueRouter({
     mode  : 'history',
+    base  : '/',
     routes: routes
 });
 
@@ -46,5 +47,5 @@ if (mock)
 const app = new Vue({
     store,
     router: router,
-    render: h => h(Home)
+    render: h => h(Layout)
 }).$mount('#app');
