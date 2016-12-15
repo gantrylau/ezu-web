@@ -28,7 +28,7 @@
         return result;
     }
     export default {
-        data() {
+        data        : function () {
             return {
                 leftMenus    : [],
                 currentMenuId: null,
@@ -94,7 +94,7 @@
             width: 1190px;
             margin: 10px auto;
             position: relative;
-            &:after {
+            &:after, &:before {
                 display: block;
                 content: ' ';
                 clear: both;
