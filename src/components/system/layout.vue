@@ -1,15 +1,15 @@
-<template id="template-layout" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<template id="template-layout">
     <div class="layout">
         <section class="layout-top-nav">
-            <ul class="top-menus">
-                <li v-for="menu in filterMenus" v-on:click="getChildMenus(menu.id)">{{menu.name}}</li>
-            </ul>
+            <!--<ul class="top-menus">-->
+                <!--<li v-for="menu in filterMenus" v-on:click="getChildMenus(menu.id)">-->
+                    <!--<router-link v-if="menu.alias" :to="{name:menu.alias}">{{menu.name}}</router-link>-->
+                    <!--<a v-else>{{menu.name}}</a>-->
+                <!--</li>-->
+            <!--</ul>-->
         </section>
         <section class="layout-main">
-            <div class="left-menus">
-                <!--<router-view name="menu-view"></router-view>-->
-                <menu-nav :menus="leftMenus"></menu-nav>
-            </div>
+            <sidebar v-if="leftMenus && leftMenus.length>0" :menus="leftMenus" class="sidebar"></sidebar>
             <div class="content container">
                 <router-view></router-view>
             </div>
@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-    import MenuNav from './menu-nav';
+    import sidebar from './sidebar';
     function formatMenusData(menus, id) {
         let result = [];
         for (let menu of menus) {
@@ -29,7 +29,7 @@
         return result;
     }
     export default {
-        data        : function () {
+        data() {
             return {
                 leftMenus    : [],
                 currentMenuId: null,
@@ -37,19 +37,20 @@
             }
         },
         components  : {
-            'menu-nav': MenuNav
+            'sidebar': sidebar
         },
         beforeCreate: function () {
             let that = this;
             this.$http.get('/api/sys/menus').then(function (rsp) {
-                let menus = that.$store.state.menus = formatMenusData(rsp.body.data);
-                if (menus.length > 0)
-                    that.leftMenus = menus[0].children;
+                that.leftMenus = that.$store.state.menus = formatMenusData(rsp.body.data);
             })
+        },
+        created     : function () {
         },
         computed    : {
             filterMenus: function () {
                 let self = this;
+                console.log(this.$router);
                 return self.$store.state.menus.filter(function (menu) {
                     return !menu.pid
                 })
@@ -74,10 +75,10 @@
 <style rel="stylesheet/scss" lang="sass">
     .layout {
         min-width: 1190px;
-        padding-top: 80px;
+        padding-top: 70px;
         .layout-top-nav {
-            height: 80px;
-            line-height: 80px;
+            height: 70px;
+            line-height: 70px;
             background-color: #4778c7;
             position: fixed;
             top: 0;
@@ -88,6 +89,11 @@
                 li {
                     list-style-type: none;
                     float: left;
+                    margin-left: 10px;
+                    > a {
+                        font-size: 18px;
+                        color: black;
+                    }
                 }
             }
         }
@@ -100,7 +106,7 @@
                 content: ' ';
                 clear: both;
             }
-            .left-menus {
+            .sidebar {
                 width: 180px;
                 float: left;
                 background-color: white;

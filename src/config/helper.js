@@ -8,6 +8,6 @@ const fetchComponent = function (path) {
     return component;
 };
 
-module.exports = {
+export default  {
     fetchComponent: fetchComponent
 };

@@ -25,7 +25,7 @@ module.exports = {
             'vue'         : path.resolve(rootPath, 'node_modules/vue/dist/vue.min.js'),
             'vue-router'  : path.resolve(rootPath, 'node_modules/vue-router/dist/vue-router.min.js'),
             'vue-resource': path.resolve(rootPath, 'node_modules/vue-resource/dist/vue-resource.min.js'),
-            'jquery'      : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
+            // 'jquery'      : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
             'nm:'         : path.resolve(rootPath, 'node_modules'),
             'src:'        : srcPath
         }
@@ -35,7 +35,9 @@ module.exports = {
             sass: 'vue-style!css!sass?sourceMap'
         }
     },
-    externals: {},
+    externals: {
+        'jquery': 'window.$'
+    },
     plugins  : [
         new CopyWebpackPlugin([
             {from: path.resolve(srcPath, 'assets'), to: 'assets'}
@@ -46,9 +48,9 @@ module.exports = {
         //     context: __dirname,
         // }),
         // new webpack.optimize.UglifyJsPlugin({minimize: true}),
-        // new webpack.ProvidePlugin({
-        //     $: 'jquery',
-        // }),
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'js/vendor.bundle.js'),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
