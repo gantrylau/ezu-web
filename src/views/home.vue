@@ -3,9 +3,9 @@
         <p>home</p>
         <p>{{name}}</p>
         <button class="btn btn-primary" @click="open()">打开layer</button>
-        <vue-layer>
-            <input v-model="name">
-        </vue-layer>
+        <!--<vue-layer>-->
+            <!--<input v-model="name">-->
+        <!--</vue-layer>-->
     </div>
 </template>
 <script>

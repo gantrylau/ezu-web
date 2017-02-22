@@ -15,6 +15,7 @@ module.exports = {
             {test: /\.html$/, loader: 'raw'},
             {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
             {test: /\.scss$/, loader: ExtractTextPlugin.extract('style!css!sass?sourceMap')},
+            {test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/, loader: 'file'},
             {test: /\.css$/, loader: 'style!css'},
             {test: /\.vue$/, loader: 'vue'}
         ]
@@ -27,7 +28,9 @@ module.exports = {
             'vue-resource': path.resolve(rootPath, 'node_modules/vue-resource/dist/vue-resource.min.js'),
             // 'jquery'      : path.resolve(rootPath, 'node_modules/jquery/dist/jquery.slim.min.js'),
             'nm:'         : path.resolve(rootPath, 'node_modules'),
-            'src:'        : srcPath
+            'src:'        : srcPath,
+            'store'       : path.resolve(srcPath, 'store'),
+            'views'       : path.resolve(srcPath, 'views')
         }
     },
     vue      : {

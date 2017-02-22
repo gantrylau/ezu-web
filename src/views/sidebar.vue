@@ -2,7 +2,7 @@
     <div>
         <ul class="menu-nav lv1">
             <li v-for="l1 in menus" @click="toggle(l1)" :class="{'active':l1._open}">
-                <router-link v-if="l1.alias" :to="{name:l1.alias}" class="menu-name">
+                <router-link v-if="l1.alias && l1.leaf" :to="{name:l1.alias}" class="menu-name">
                     {{l1.name}}<i v-if="l1.children && l1.children.length>0" class="fa" :class="[l1._open?'fa-angle-up':'fa-angle-down']"
                                   aria-hidden="true"></i>
                 </router-link>
@@ -12,7 +12,7 @@
                 </a>
                 <ul v-if="l1.children && l1.children.length>0" class="lv2" @click.stop>
                     <li v-for="l2 in l1.children">
-                        <router-link v-if="l2.alias" :to="{name:l2.alias}" class="menu-name">{{l2.name}}</router-link>
+                        <router-link v-if="l2.alias && l2.leaf" :to="{name:l2.alias}" class="menu-name">{{l2.name}}</router-link>
                         <a v-else class="menu-name">{{l2.name}}</a>
                     </li>
                 </ul>

@@ -1,12 +1,7 @@
 <template id="template-layout">
     <div class="layout">
         <section class="layout-top-nav">
-            <!--<ul class="top-menus">-->
-                <!--<li v-for="menu in filterMenus" v-on:click="getChildMenus(menu.id)">-->
-                    <!--<router-link v-if="menu.alias" :to="{name:menu.alias}">{{menu.name}}</router-link>-->
-                    <!--<a v-else>{{menu.name}}</a>-->
-                <!--</li>-->
-            <!--</ul>-->
+
         </section>
         <section class="layout-main">
             <sidebar v-if="leftMenus && leftMenus.length>0" :menus="leftMenus" class="sidebar"></sidebar>
@@ -18,11 +13,20 @@
 </template>
 <script>
     import sidebar from './sidebar';
-    function formatMenusData(menus, id) {
+
+    import {mapState, mapActions, mapMutations, mapGetters} from 'vuex'
+
+    import {GET_MENU_TREE} from 'store/modules/menu/getters'
+    import {FETCH_MENU} from 'store/modules/menu/actions'
+
+    function formatMenusData(menus, parentAlias) {
+
         let result = [];
+        if (!menus)
+            menus = [];
         for (let menu of menus) {
-            if (menu.pid == id) {
-                menu.children = formatMenusData(menus, menu.id);
+            if (menu.parentAlias === parentAlias || (!menu.parentAlias && !parentAlias)) {
+                menu.children = formatMenusData(menus, menu.alias);
                 result.push(menu);
             }
         }
@@ -31,7 +35,7 @@
     export default {
         data() {
             return {
-                leftMenus    : [],
+                allMenus     : [],
                 currentMenuId: null,
                 isMenuShown  : true,
             }
@@ -40,21 +44,15 @@
             'sidebar': sidebar
         },
         beforeCreate: function () {
-            let that = this;
-            this.$http.get('/api/sys/menus').then(function (rsp) {
-                that.leftMenus = that.$store.state.menus = formatMenusData(rsp.body.data);
-            })
+            this.$store.dispatch(FETCH_MENU);
         },
         created     : function () {
+
         },
         computed    : {
-            filterMenus: function () {
-                let self = this;
-                console.log(this.$router);
-                return self.$store.state.menus.filter(function (menu) {
-                    return !menu.pid
-                })
-            }
+            ...mapGetters({
+                leftMenus: GET_MENU_TREE
+            })
         },
         mounted     : function () {
         },
@@ -73,6 +71,8 @@
     }
 </script>
 <style rel="stylesheet/scss" lang="sass">
+    @import "../common";
+
     .layout {
         min-width: 1190px;
         padding-top: 70px;
@@ -114,9 +114,10 @@
             }
             .content {
                 margin-left: 10px;
+                padding: 0 15px 30px 15px;
                 float: left;
                 background-color: white;
-                width: 1000px;
+                width: 970px;
                 display: inline-block;
             }
         }

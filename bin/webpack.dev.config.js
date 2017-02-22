@@ -13,8 +13,9 @@ module.exports = merge(baseConfig, {
         app   : [path.resolve(constans.rootPath, 'src/index.js'), hotMiddlewareScript]
     },
     output: {
-        publicPath: publicPath,
-        path      : path.resolve(constans.rootPath, 'dev'),
-        filename  : 'js/[name].js'//[hash]表示hash值,[name]文件名
+        publicPath   : publicPath,
+        path         : path.resolve(constans.rootPath, 'dev'),
+        filename     : 'js/[name].js',//[hash]表示hash值,[name]文件名
+        chunkFilename: 'js/[id].js'
     }
 });

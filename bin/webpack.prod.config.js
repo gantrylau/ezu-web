@@ -11,6 +11,7 @@ module.exports = merge(baseConfig, {
     output: {
         // publicPath: publicPath,
         path    : path.resolve(baseConfig.rootPath, 'dev'),
-        filename: 'js/[name].js'//[hash]表示hash值,[name]文件名
+        filename     : 'js/[name].js',//[hash]表示hash值,[name]文件名
+        chunkFilename: 'js/[id].js'
     }
 });
