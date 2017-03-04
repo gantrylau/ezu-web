@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-    import sidebar from './sidebar';
+    import sidebar from 'components/sidebar';
 
     import {mapState, mapActions, mapMutations, mapGetters} from 'vuex'
 
@@ -47,7 +47,6 @@
             this.$store.dispatch(FETCH_MENU);
         },
         created     : function () {
-
         },
         computed    : {
             ...mapGetters({

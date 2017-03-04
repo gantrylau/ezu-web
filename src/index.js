@@ -1,12 +1,15 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
+import Vue from 'vue'
+import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
+
+import './plugins/utils'
+
 import 'element-ui/lib/theme-default/index.css'
 
-import layout from './views/layout';
-import dataFactory from './config/dataFactory';
-import router from './config/router';
-import store from './store/index';
+import layout from 'views/layout'
+import dataFactory from './config/dataFactory'
+import router from './config/router'
+import store from 'store'
 
 Vue.use(VueResource);
 Vue.use(ElementUI);
@@ -29,7 +32,15 @@ Vue.http.interceptors.push((request, next) => {
         if (mock)
             response.body = JSON.parse(response.bodyText || '');
 
-        if (request.showError != false && !response.body.success) {
+        if (!response.body.success && response.body.errorCode==='auth.session.expire') {
+            ElementUI.MessageBox('登录授权已过期，请重新登录', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                router.push({name:'login'});
+            });
+        } else if (request.showError != false && !response.body.success) {
             ElementUI.Message({
                 showClose: true,
                 message  : response.body.errorMsg || '出错了',
@@ -52,8 +63,12 @@ Vue.config.debug = true;//开启错误提示
 if (mock)
     dataFactory.mock();
 
+router.beforeEach((to, from, next) => {
+    next();
+});
+
 const app = new Vue({
     store,
-    router: router,
-    render: h => h(layout)
+    router,
+    template:'<router-view></router-view>'
 }).$mount('#app');

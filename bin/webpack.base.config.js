@@ -30,6 +30,7 @@ module.exports = {
             'nm:'         : path.resolve(rootPath, 'node_modules'),
             'src:'        : srcPath,
             'store'       : path.resolve(srcPath, 'store'),
+            'components'  : path.resolve(srcPath, 'components'),
             'views'       : path.resolve(srcPath, 'views')
         }
     },

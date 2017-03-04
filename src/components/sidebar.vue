@@ -1,35 +1,52 @@
 <template>
     <div>
-        <ul class="menu-nav lv1">
-            <li v-for="l1 in menus" @click="toggle(l1)" :class="{'active':l1._open}">
-                <router-link v-if="l1.alias && l1.leaf" :to="{name:l1.alias}" class="menu-name">
-                    {{l1.name}}<i v-if="l1.children && l1.children.length>0" class="fa" :class="[l1._open?'fa-angle-up':'fa-angle-down']"
-                                  aria-hidden="true"></i>
-                </router-link>
-                <a v-else class="menu-name">
-                    {{l1.name}}<i v-if="l1.children && l1.children.length>0" class="fa" :class="[l1._open?'fa-angle-up':'fa-angle-down']"
-                                  aria-hidden="true"></i>
-                </a>
-                <ul v-if="l1.children && l1.children.length>0" class="lv2" @click.stop>
-                    <li v-for="l2 in l1.children">
-                        <router-link v-if="l2.alias && l2.leaf" :to="{name:l2.alias}" class="menu-name">{{l2.name}}</router-link>
-                        <a v-else class="menu-name">{{l2.name}}</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <el-row>
+            <el-col>
+                <el-menu :default-active="$route.name" class="el-menu-vertical-demo" @select="toRouter">
+                    <template v-for="l1 in menus">
+                        <el-submenu v-if="l1.children && l1.children.length>0" :index="l1.id">
+                            <template slot="title"><i class="el-icon-message"></i>{{l1.name}}</template>
+                            <el-menu-item v-for="l2 in l1.children" :index="l2.alias">{{l2.name}}</el-menu-item>
+                        </el-submenu>
+                        <el-menu-item v-else :index="l1.alias"><i class="el-icon-menu"></i>{{l1.name}}</el-menu-item>
+                    </template>
+                </el-menu>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
+    import {mapGetters} from 'vuex'
+
+    function eachRouter(routes) {
+        let names = [];
+        for (let route of routes) {
+            if (route.name)
+                names.push(route.name);
+            if (!$.utils.isBlank(route.children)) {
+                names = names.concat(eachRouter(route.children));
+            }
+        }
+        return names;
+    }
+
     export default {
         props   : {
             menus: {
                 type: Array,
             }
         },
-        computed: {},
+        computed: {
+            routerNames: function () {
+                return eachRouter(this.$router.options.routes);
+            }
+        },
         methods : {
-            toggle: function (menu) {
+            toRouter: function (name) {
+                if (this.routerNames.indexOf(name) >= 0)
+                    this.$router.push({name: name});
+            },
+            toggle  : function (menu) {
                 if (menu.children && menu.children.length > 0)
                     this.$set(menu, '_open', !menu._open);
             }

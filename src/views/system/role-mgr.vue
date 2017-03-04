@@ -124,7 +124,10 @@
             },
             deleteRole         : function (role) {
                 let vm = this;
-                vm.$http.delete('/api/sys/roles/' + role.id, {loadingText:'正在删除，请稍候...', successText:'删除成功！'}).then(function (rsp) {
+                vm.$http.delete('/api/sys/roles/' + role.id, {
+                    loadingText: '正在删除，请稍候...',
+                    successText: '删除成功！'
+                }).then(function (rsp) {
                     vm.loadData();
                 })
             },
@@ -141,7 +144,7 @@
             loadData           : function () {
                 let vm = this;
                 vm.$http.get('/api/sys/roles', {params: vm.queryParam}).then(function (rsp) {
-                    vm.listData = rsp.data.data;
+                    vm.listData = rsp.data.data || {};
                 });
             },
             handleSizeChange   : function (val) {

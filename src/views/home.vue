@@ -1,20 +1,20 @@
 <template>
     <div>
+
         <p>home</p>
         <p>{{name}}</p>
         <button class="btn btn-primary" @click="open()">打开layer</button>
-        <!--<vue-layer>-->
-            <!--<input v-model="name">-->
-        <!--</vue-layer>-->
     </div>
 </template>
 <script>
     export default {
         data() {
             return {
-                name: 'hello',
+                name     : 'hello',
                 layerShow: false
             }
+        },
+        created : function () {
         },
         computed: {
             filterMenus: function () {
@@ -22,11 +22,13 @@
             }
         },
         methods : {
-            test: function () {
-                alert(11);
-            },
             open: function () {
-                this.layerShow = true;
+                this.$http.post('/api/auth/login', {
+                    username: 'test1',
+                    password: 'E10ADC3949BA59ABBE56E057F20F883E'
+                }).then(function (rsp) {
+                    console.log(rsp);
+                })
             }
         }
     }
